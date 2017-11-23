@@ -102,5 +102,33 @@ function _M.get_post_data ()
     return args
 end
 
+function _M.get_client_ip()
+    local CLIENT_IP = ngx.req.get_headers()["X_real_ip"]
+    if CLIENT_IP == nil then
+        CLIENT_IP = ngx.req.get_headers()["X_Forwarded_For"]
+    end
+    if CLIENT_IP == nil then
+        CLIENT_IP  = ngx.var.remote_addr
+    end
+    if CLIENT_IP == nil then
+        CLIENT_IP  = ""
+    end
+    return CLIENT_IP
+end
+
+-- Get the client user agent
+function _M.get_user_agent()
+    local USER_AGENT = ngx.var.http_user_agent
+    if USER_AGENT == nil then
+        USER_AGENT = "unknown"
+    end
+    return USER_AGENT
+end
+-- get server's host
+function _M.get_server_host()
+    local host = ngx.req.get_headers()["Host"]
+    return host
+end
+
 return _M
 
